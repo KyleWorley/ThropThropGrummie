@@ -1,5 +1,4 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, g, request
-from data import Articles
 import sqlite3 as sql
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -30,8 +29,7 @@ class launch:
 def connect_db():
     connection = sql.connect(app.database)
     connection.row_factory = sql.Row 
-    return connection
-
+    return connection 
 def getCursor():
     return connect_db().cursor()
 
@@ -64,9 +62,11 @@ def launchpage(mission):
     cur.execute("select * from launches where mission = ?", [mission])
     rows = cur.fetchall()
     l = rows[0]
-    app.logger.info(l)
+    date = str(l['date'])
+    app.logger.info(date)
+    date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
     cur.close()
-    return render_template('launch.html', launch=l)
+    return render_template('launch.html', launch=l, date = date)
 
 if __name__ == '__main__':
     app.run()
