@@ -57,6 +57,9 @@ def index():
 def about():
     return render_template('about.html')
 
+@app.route('/launch/<string:mission>/')
+def launch(launch):
+    return render_template('launch.html', launch=launch)
 
 if __name__ == '__main__':
     app.run()
