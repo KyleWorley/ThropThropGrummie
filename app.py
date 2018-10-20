@@ -50,6 +50,7 @@ def index():
                     row['link'], row['image'])
             app.logger.info(l.image)
             launches.append(l)
+    cur.close()
 
     return render_template('home.html', launches=launches)
 
@@ -59,7 +60,13 @@ def about():
 
 @app.route('/launch/<string:mission>/')
 def launchpage(mission):
-    return render_template('launch.html', mission=mission)
+    cur = getCursor()
+    cur.execute("select * from launches where mission = ?", [mission])
+    rows = cur.fetchall()
+    l = rows[0]
+    app.logger.info(l)
+    cur.close()
+    return render_template('launch.html', launch=l)
 
 if __name__ == '__main__':
     app.run()
