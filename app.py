@@ -12,13 +12,23 @@ app.debug = True
 app.database = "spaceapps.db"
 app.secret_key='#SpaceAppsHSV'
 
-
 def connect_db():
-    return sql.connect(app.database)
+    connection = sql.connect(app.database)
+    connection.row_factory = sql.Row 
+    return connection
+
+def getCursor():
+    return connect_db().cursor()
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    cur = getCursor()
+    cur.execute("select mission from launches")
+    rows = cur.fetchall()
+    if len(rows)>0:
+        launch = rows[0]
+    mission = launch['mission']
+    return render_template('home.html', mission=mission)
 
 @app.route('/about')
 def about():
