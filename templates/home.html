@@ -41,7 +41,11 @@
                   <img class="card-img-top" src={{launch.image}}>
                 </a>
                 <div class="card-body">
-                    <p class="card-text">{{launch.mission}}<br> {{launch.location}} <br> {{launch.Description}}</p>
+				    <!--<a href="/launch/{{launch.mission}}">  -->
+                    <p class="card-text"><big><b><u> {{launch.mission}} </big></b> </u><br> </p>
+						<p class="card-text"><i><b> {{launch.location}} </b></i> <br> </p>
+						<p>{{launch.Description}}</p>
+					</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
 					<a href="/launch/{{launch.mission}}">  
