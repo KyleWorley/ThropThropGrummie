@@ -37,15 +37,15 @@
         {% for launch in launches %}
             <div class="col-md-4">
               <div class="card mb-4 shadow-sm">
-				<a href="/launch/{{launch.mission}}">  
+                <a href="/launch/{{launch.mission}}">  
                   <img class="card-img-top" src={{launch.image}}>
-				<a>
+                </a>
                 <div class="card-body">
                     <p class="card-text">{{launch.mission}}<br> {{launch.location}} <br> {{launch.Description}}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
+					<a href="/launch/{{launch.mission}}">  
                       <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                     </div>
                     <small class="text-muted">Launch Date: {{launch.date}}</small>
                   </div>
