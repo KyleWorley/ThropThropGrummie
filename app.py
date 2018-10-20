@@ -12,6 +12,21 @@ app.debug = True
 app.database = "spaceapps.db"
 app.secret_key='#SpaceAppsHSV'
 
+class launch:
+    def __init__(self, date, time, country, state, location,
+            Manufacturer, model, mission, Description, link, image):
+        self.date = date
+        self.time = time
+        self.country = country
+        self.state = state
+        self.location = location
+        self.Manufacturer = Manufacturer
+        self.model = model
+        self.mission = mission
+        self.Description = Description
+        self.link = link
+        self.image = image
+
 def connect_db():
     connection = sql.connect(app.database)
     connection.row_factory = sql.Row 
@@ -23,12 +38,20 @@ def getCursor():
 @app.route('/')
 def index():
     cur = getCursor()
-    cur.execute("select mission from launches")
+    cur.execute("select * from launches")
     rows = cur.fetchall()
+    launches = []
     if len(rows)>0:
-        launch = rows[0]
-    mission = launch['mission']
-    return render_template('home.html', mission=mission)
+        for i in range(0,len(rows)):
+            row = rows[i]
+            l = launch(row['date'], row['time'], row['country'],
+                    row['state'],row['location'], row['Manufacturer'],
+                    row['model'], row['mission'], row['Description'],
+                    row['link'], row['image'])
+            app.logger.info(l.image)
+            launches.append(l)
+
+    return render_template('home.html', launches=launches)
 
 @app.route('/about')
 def about():
