@@ -3,6 +3,7 @@ import sqlite3 as sql
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+#from SpaceAppsUtil.py import *
 
 app = Flask(__name__)
 app.debug = True
@@ -64,9 +65,54 @@ def launchpage(mission):
     l = rows[0]
     date = str(l['date'])
     app.logger.info(date)
+    dateWords = dateToWords(int(date))# making date into words
     date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
+
+    
     cur.close()
-    return render_template('launch.html', launch=l, date = date)
+    return render_template('launch.html', launch=l, date = date, dateWords=dateWords)
+
+def dateToWords(dateNum):
+    # get day
+    day = dateNum % 100
+    dateNum = dateNum / 100
+    # get month
+    m = dateNum %100
+    dateNum = dateNum/100
+    if m == 1:
+        month = "January"
+    elif m == 2:
+        month = "February"
+    elif m == 3:
+        month = "March"
+    elif m == 4:
+        month = "April"
+    elif m == 5:
+        month = "May"
+    elif m == 6:
+        month = "June"
+    elif m == 7:
+        month = "July"
+    elif m == 8:
+        month = "August"
+    elif m == 9:
+        month = "September"
+    elif m == 10:
+        month = "October"
+    elif m == 11:
+        month = "November"
+    elif m == 12:
+        month = "December"
+    else:
+        month = m
+    # get year
+    year = dateNum
+    dateWords = month + day + year
+    return dateWords
+
 
 if __name__ == '__main__':
     app.run()
+
+
+
