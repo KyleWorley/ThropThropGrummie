@@ -34,7 +34,9 @@
             <div class="col-md-4">
               <div class="card mb-4 shadow-sm">
                 <a href="/launch/{{launch.mission}}">
-                  <img class="card-img-top" align="middle" src={{launch.image}}>
+                    <div class="card-header" style="background-color:#C70445">
+                        <img class="img-responsive" src={{launch.image}}>
+                    </div>
                 </a>
                 <div class="card-body">
 				    <!--<a href="/launch/{{launch.mission}}">  -->
@@ -61,17 +63,10 @@
 
     <footer class="text-muted">
       <div class="container">
-        <p class="float-right">
+        <p class="float-center">
           <a href="#">Back to top</a>
-        </p>
-        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
       </div>
     </footer>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
   </body>
 </html>
 {% endblock %}
