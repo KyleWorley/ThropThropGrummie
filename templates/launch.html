@@ -20,23 +20,4 @@
 <!-- /.col-lg-9 -->
 </div>
 
-</div>
-    <h1>{{launch.mission}}</h1>
-	
-	<h2>{{date}}</h2>
-    <!--<h2>{{dateWords}}</h2>-->
-	
-	<h2>{{launch.location}}</h2>
-	<a href="http://maps.google.com/?q={{launch.location}}+{{launch.state}}+{{launch.country}}">
-		<h2>{{launch.state}} <b> {{launch.country}} </b></h2>
-	</a>
-	<h4><b>Company/Organization: </b>{{launch.manufacturer}}</h4>
-	<h4><b>Model:</b> {{launch.model}}</h4>
-	<h4>Mission: </h4> 	<p> {{launch.mission}} </p>
-	<h4>Launch description</h4>
-	<p>{{launch.description}}</p>
-	<h4>Link</h4>
-	<p>{{launch.link}}</p>
-	<img src="{{launch.image}}" alt="" />
-	
 {% endblock %}
