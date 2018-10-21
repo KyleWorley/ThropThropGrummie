@@ -12,23 +12,23 @@
     <title>Space Apps Challenge 2018 HSV</title>
 
     <!-- Custom styles for this template -->
-    <link href="./css/album.css" rel="stylesheet">
+    <link href={{url_for('static', filename="album.css")}} rel="stylesheet">
   </head>
 
   <body>
 
     <main role="main">
 
-      <section class="jumbotron text-center">
+      <section class="jumbotron jumbotron-fluid text-center">
         <div class="container">
-          <h1 class="jumbotron-heading">Do You Know When the Next Rocket Launch Is?</h1>
+          <h1 class="jumbotron-heading" style="color:#C70445">Do You Know When the Next Rocket Launch Is?</h1>
           <p class="lead text-muted">Stay up-to-date with the world's latest space launches</p> <p>
           </p>
         </div>
       </section>
 
-      <div class="album py-5 bg-light">
-        <div class="container">
+      <div class="album py-5 bg-light" style="background-color:#000000">
+          <div class="container">
             <div class="row">
         {% for launch in launches %}
             <div class="col-md-4">
