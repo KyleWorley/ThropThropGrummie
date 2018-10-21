@@ -7,11 +7,28 @@
     <div class="container" style="background-color:#000000">
         <div class="col-lg-12">
             <div class="card mt-4">
-                <img class="card-img-top img-fluid" src="{{launch.image}}" alt="">
+                <img class="card-img-top img-fluid" src="https://mk0spaceflightnoa02a.kinstacdn.com/wp-content/uploads/2017/11/block1_night_mf_bkdrop_adj.jpg" alt="">
                 <div class="card-body">
-                    <h3 class="card-title">{{launch.mission}}</h3>
-                    <h4>{{launch.manufacturer}}</h4>
+				    <h3 class="card-title">{{launch.mission}}</h3>
+				    <h4>Date: {{launch.date}}</h4>
+					<h5>{{launch.time}}</h5>
+						<a href="http://maps.google.com/?q={{launch.location}}+{{launch.state}}+{{launch.country}}" target="_blank">
+							<h4>{{launch.location}}</h4>
+						</a>
+					<h4><b>Model:</b> {{launch.vehicle}}</h4>
+					<h4>Mission: </h4> 	<p> {{launch.mission}} </p>
+					<a href="http://maps.google.com/?q=parks+near+{{launch.location}}+{{launch.state}}+{{launch.country}}" target="_blank">
+						<h4>Places to view the launch</h4>
+					</a>
                     <p class="card-text">{{launch.description}}</p>
+						<h6>Link</h6>
+						<p>{{launch.article}}</p>
+					<img src="{{launch.image}}" alt="" />
+											<br>
+					<div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Remind Me</button>
+                    </div>
+					<p>Subscribe for e-mail updates and notifications.</p>
                 </div>
             </div>
             <!-- /.card -->
