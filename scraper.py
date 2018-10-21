@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
-import lxml.html
 import sqlite3 as sql
 import csv
 
