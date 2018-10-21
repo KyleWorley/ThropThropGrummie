@@ -5,7 +5,6 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 from requests import get
 from requests_oauthlib import OAuth1Session
-import json
 #from SpaceAppsUtil.py import *
 
 app = Flask(__name__)
@@ -63,20 +62,22 @@ def launchpage(mission):
     cur.execute("select * from launches where mission = ?", [mission])
     rows = cur.fetchall()
     l = rows[0]
-    hashtag = l['mission'] + '-' + l['vehicle']
-    hashtag = hashtag.replace(" ", "")
+    hashtag = l['mission']
     app.logger.info(hashtag)
     url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + hashtag + '&result_type=recent'
+    images = get(url)
     session = OAuth1Session('KbFIpnP6oaZkSka4wSRqEk8Qz',
                     client_secret='7R2Dcb1BZod4aXbyzukOJYJF6lMR0ExOe5Fk7me3jCWhgf3Iz3')
     r = session.get(url)
     app.logger.info(r.content)
+    app.logger.info(images.status_code)
     date = str(l['date'])
-    app.logger.info(date)
     #dateWords = dateToWords(int(date))# making date into words
+    app.logger.info(date)
+
     date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
     cur.close()
-    return render_template('launch.html', launch=l, date = date, hashtag = hashtag)
+    return render_template('launch.html', launch=l, date = date)
 
 def dateToWords(dateNum):
     # get day
