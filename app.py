@@ -5,14 +5,18 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 from requests import get
 from requests_oauthlib import OAuth1Session
-#from SpaceAppsUtil.py import *
+import json
+import yaml
 
 app = Flask(__name__)
 app.debug = True
 
+with open("config.yml", 'r') as ymlfile:
+    cfg = yaml.load(ymlfile)
+
 #SQL
-app.database = "spaceapps.db"
-app.secret_key='#SpaceAppsHSV'
+app.database = cfg['sqlite3']['database']
+app.secret_key = cfg['sqlite3']['secret-key']
 
 class launch:
     def __init__(self, date, time, location,
@@ -62,12 +66,13 @@ def launchpage(mission):
     cur.execute("select * from launches where mission = ?", [mission])
     rows = cur.fetchall()
     l = rows[0]
-    hashtag = l['mission']
+    hashtag = l['mission'] + '-' + l['vehicle']
+    hashtag = hashtag.replace(' ', '')
     app.logger.info(hashtag)
     url = 'https://api.twitter.com/1.1/search/tweets.json?q=%23' + hashtag + '&result_type=recent'
     images = get(url)
-    session = OAuth1Session('KbFIpnP6oaZkSka4wSRqEk8Qz',
-                    client_secret='7R2Dcb1BZod4aXbyzukOJYJF6lMR0ExOe5Fk7me3jCWhgf3Iz3')
+    session = OAuth1Session(cfg['twitter']['api-key'],
+                    client_secret=cfg['twitter']['secret'])
     r = session.get(url)
     #app.logger.info(r.content)
     responseString = r.content.decode('utf-8')
@@ -76,55 +81,16 @@ def launchpage(mission):
     statuses = responseJson["statuses"]
     for statusDict in statuses:
         entities = statusDict['entities']
+        app.logger.info(entities)
         media = entities['media'][0]
         app.logger.info(media['media_url_https'])
         userImages.append(media['media_url_https'])
     date = str(l['date'])
-    #dateWords = dateToWords(int(date))# making date into words
     app.logger.info(date)
 
     date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
     cur.close()
     return render_template('launch.html', launch=l, date = date, hashtag = hashtag, images=userImages)
-
-def dateToWords(dateNum):
-    # get day
-    day = dateNum % 100
-    dateNum = dateNum / 100
-    # get month
-    m = dateNum %100
-    dateNum = dateNum/100
-    if m == 1:
-        month = "January"
-    elif m == 2:
-        month = "February"
-    elif m == 3:
-        month = "March"
-    elif m == 4:
-        month = "April"
-    elif m == 5:
-        month = "May"
-    elif m == 6:
-        month = "June"
-    elif m == 7:
-        month = "July"
-    elif m == 8:
-        month = "August"
-    elif m == 9:
-        month = "September"
-    elif m == 10:
-        month = "October"
-    elif m == 11:
-        month = "November"
-    elif m == 12:
-        month = "December"
-    else:
-        month = m
-    # get year
-    year = dateNum
-    dateWords = month + day + year
-    return dateWords
-
 
 if __name__ == '__main__':
     app.run()
