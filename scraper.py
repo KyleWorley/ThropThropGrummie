@@ -85,63 +85,67 @@ def find_by_tag(st,name):
     return remove_tags(st[s:e])
         
     
+conn = create_connection(database)
 
 spnPage = simple_get(spn)
-
 html = BeautifulSoup(spnPage, 'html.parser')
-
 missionData = html.find_all('table', class_='launchcalendar')
 
 for data in missionData:
-    header = str(data.find('tr'))
-    s = header.find("<span>")+6
-    e = header.find("</span>",s)
-    backup_date = header[s:e]
-    s = header.find("<th col")+1
-    s = header.find(">",s)+1
-    e = header.find("<",s)
-    mission = header[s:e]
-    print(mission)
-    rawd = str(data)
-    s = rawd.find("url")+5
-    e = rawd.find("'",s)
-    image = rawd[s:e]
-    vehicle = find_by_tag(rawd,"Vehicle")
-    print(vehicle)
-    location = find_by_tag(rawd,"Location")
-    print(location)
-    time = find_by_tag(rawd,"Time")
-    date = ""
-    print(time)
-    if time != "TBD":
-        s = time.find("/")+2
-        e = time.find(" ",s)
-        date = time[s:e]
-        time = time[e+1:-1]
-    else:
-        date = backup_date
-    print(date)
-    print(time)
-    desc = data.find('td', class_='description')
-    desc = desc.find('p')
-    desc = desc.text
-    print(desc)
-    arts = str(data.find('ul'))
-    articles = ""
-    s = 0
-    s = arts.find("href",s)
-    while s != -1:
-        s = arts.find("\"",s)+1
-        e = arts.find("\"",s)
-        articles = articles + arts[s:e] + ";"
+    try:
+        header = str(data.find('tr'))
+        s = header.find("<span>")+6
+        e = header.find("</span>",s)
+        backup_date = header[s:e]
+        s = header.find("<th col")+1
+        s = header.find(">",s)+1
+        e = header.find("<",s)
+        mission = header[s:e]
+        #print(mission)
+        rawd = str(data)
+        s = rawd.find("url")+5
+        e = rawd.find("'",s)
+        image = rawd[s:e]
+        vehicle = find_by_tag(rawd,"Vehicle")
+        #print(vehicle)
+        location = find_by_tag(rawd,"Location")
+        #print(location)
+        time = find_by_tag(rawd,"Time")
+        date = ""
+        #print(time)
+        if time != "TBD":
+            s = time.find("/")+2
+            e = time.find(" ",s)
+            date = time[s:e]
+            time = time[e+1:-1]
+        else:
+            date = backup_date
+        #print(date)
+        #print(time)
+        desc = data.find('td', class_='description')
+        desc = desc.find('p')
+        desc = desc.text
+        #print(desc)
+        arts = str(data.find('ul'))
+        articles = ""
+        s = 0
         s = arts.find("href",s)
-    print(articles)
+        while s != -1:
+            s = arts.find("\"",s)+1
+            e = arts.find("\"",s)
+            articles = articles + arts[s:e] + ";"
+            s = arts.find("href",s)
+        #print(articles)
+        conn = create_connection(database)
+        cur = conn.cursor()
+        cur.execute('''INSERT INTO launches VALUES("''' + date + '''","''' + time + '''","''' + location + '''","''' + vehicle + '''","''' + mission + '''","''' + desc + '''","''' + articles + '''","''' + image + '''")''')
+        conn.close()
     
+    except Error as e:
+        print(e)
     
-#for data in missionData:
-#    print(data.text)
 
-conn = create_connection(database)
+
 
 """try:
     cur = conn.cursor()
