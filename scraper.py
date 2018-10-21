@@ -24,7 +24,7 @@ def connect_db():
 def getCursor():
     return connect_db().cursor()
 
-spn = "https://spaceflightnow.com/launch-schedule/"
+spn = "http://www.spaceflightinsider.com/launch-schedule/"
 
 def simple_get(url):
     """
@@ -61,19 +61,97 @@ def log_error(e):
     make it do anything.
     """
     print(e)
+    
+def create_connection(db_file):
+    try:
+        conn = sql.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+    return none
+    
+def remove_tags(st):
+    while st.find("<") != -1:
+        s = st.find("<")
+        e = st.find(">")+1
+        su = st[s:e]
+        st = st.replace(su,"")
+    return st
+        
+def find_by_tag(st,name):
+    s = st.find(name)
+    s = st.find("<td>",s)+4
+    e = st.find("</td",s)
+    return remove_tags(st[s:e])
+        
+    
 
 spnPage = simple_get(spn)
 
 html = BeautifulSoup(spnPage, 'html.parser')
 
-missionData = html.find_all('div', class_='missiondata')
-descriptions = html.find_all('div', class_='missdescrip')
-dateName = html.find_all('div', class_='datename')
+missionData = html.find_all('table', class_='launchcalendar')
 
+for data in missionData:
+    header = str(data.find('tr'))
+    s = header.find("<span>")+6
+    e = header.find("</span>",s)
+    backup_date = header[s:e]
+    s = header.find("<th col")+1
+    s = header.find(">",s)+1
+    e = header.find("<",s)
+    mission = header[s:e]
+    print(mission)
+    rawd = str(data)
+    s = rawd.find("url")+5
+    e = rawd.find("'",s)
+    image = rawd[s:e]
+    vehicle = find_by_tag(rawd,"Vehicle")
+    print(vehicle)
+    location = find_by_tag(rawd,"Location")
+    print(location)
+    time = find_by_tag(rawd,"Time")
+    date = ""
+    print(time)
+    if time != "TBD":
+        s = time.find("/")+2
+        e = time.find(" ",s)
+        date = time[s:e]
+        time = time[e+1:-1]
+    else:
+        date = backup_date
+    print(date)
+    print(time)
+    desc = data.find('td', class_='description')
+    desc = desc.find('p')
+    desc = desc.text
+    print(desc)
+    arts = str(data.find('ul'))
+    articles = ""
+    s = 0
+    s = arts.find("href",s)
+    while s != -1:
+        s = arts.find("\"",s)+1
+        e = arts.find("\"",s)
+        articles = articles + arts[s:e] + ";"
+        s = arts.find("href",s)
+    print(articles)
+    
+    
 #for data in missionData:
 #    print(data.text)
 
-for data in dateName:
+conn = create_connection(database)
+
+"""try:
+    cur = conn.cursor()
+    cur.execute('''INSERT INTO launches VALUES(1,1,"hello","test","fda","fdaasdf","hello","test","fda","fdaasdf","last")''')
+    conn.commit()
+except Error as e:
+    print(e)"""
+
+
+"""for data in dateName:
     launchDate = data.find('span', class_='launchdate')
     print(launchDate.text)
 
@@ -94,10 +172,11 @@ for data in dateName:
 
     description = data.find_next('div', class_='missdescrip').text
     print(description)
+    
 
    # con = connect_db()
    # date INTEGER, time INTEGER, country TEXT, state TEXT, location TEXT, Manufacturer TEXT, model TEXT, mission TEXT, Description TEXT, link TEXT, image TEXT
    #con.execute("insert into launches(date, time, country, state, location,
             #Manufacturer, model, mission, Description, link, image") values
-            #(?,?,?,?,?,?,?,?,?,?,?)", (launchDate, 0, ))
+            #(?,?,?,?,?,?,?,?,?,?,?)", (launchDate, 0, ))"""
 
