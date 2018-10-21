@@ -2,22 +2,35 @@
 {% block body %}
 
 <link href={{url_for('static', filename="launch.css")}} rel="stylesheet">
-
-<div class="container" style="background-color:#000000">
-<div class="row info" style="text-align:center;">
+<div class="row info">
 </div>
-<div class="col-lg-12">
-    <div class="card mt-4">
-        <img class="card-img-top img-fluid" src="{{launch.image}}" alt="">
-        <div class="card-body">
-            <h3 class="card-title">{{launch.mission}}</h3>
-            <h4>{{launch.manufacturer}}</h4>
-            <p class="card-text">{{launch.description}}</p>
+    <div class="container" style="background-color:#000000">
+        <div class="col-lg-12">
+            <div class="card mt-4">
+                <img class="card-img-top img-fluid" src="{{launch.image}}" alt="">
+                <div class="card-body">
+                    <h3 class="card-title">{{launch.mission}}</h3>
+                    <h4>{{launch.manufacturer}}</h4>
+                    <p class="card-text">{{launch.description}}</p>
+                </div>
+            </div>
+            <!-- /.card -->
         </div>
+    
+    <div class="container">
+
+        <h1 class="my-4 text-center text-lg-left" style="color:#C70445;">Upload your photos using #{{hashtag}}!</h1>
+
+        <div class="row text-center text-lg-left">
+
+            <div class="col-lg-3 col-md-4 col-xs-6">
+                <a href="#" class="d-block mb-4 h-100">
+                    <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                </a>
+            </div>
+        </div>
+
     </div>
-    <!-- /.card -->
-</div>
-<!-- /.col-lg-9 -->
-</div>
+<!-- /.container -->
 
 {% endblock %}
