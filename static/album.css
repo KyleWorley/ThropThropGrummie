@@ -43,3 +43,9 @@ footer p {
 .container-fluid {
     background-color: #000000;
 }
+
+.card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}

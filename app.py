@@ -13,18 +13,15 @@ app.database = "spaceapps.db"
 app.secret_key='#SpaceAppsHSV'
 
 class launch:
-    def __init__(self, date, time, country, state, location,
-            Manufacturer, model, mission, Description, link, image):
+    def __init__(self, date, time, location,
+            vehicle, mission, description, articles, image):
         self.date = date
         self.time = time
-        self.country = country
-        self.state = state
         self.location = location
-        self.Manufacturer = Manufacturer
-        self.model = model
+        self.vehicle = vehicle
         self.mission = mission
-        self.Description = Description
-        self.link = link
+        self.description = description
+        self.articles = articles 
         self.image = image
 
 def connect_db():
@@ -43,10 +40,10 @@ def index():
     if len(rows)>0:
         for i in range(0,len(rows)):
             row = rows[i]
-            l = launch(row['date'], row['time'], row['country'],
-                    row['state'],row['location'], row['Manufacturer'],
-                    row['model'], row['mission'], row['Description'],
-                    row['link'], row['image'])
+            l = launch(row['date'], row['time'],
+                    row['location'], row['vehicle'],
+                    row['mission'], row['description'],
+                    row['articles'], row['image'])
             app.logger.info(l.image)
             launches.append(l)
     cur.close()
@@ -65,12 +62,10 @@ def launchpage(mission):
     l = rows[0]
     date = str(l['date'])
     app.logger.info(date)
-    dateWords = dateToWords(int(date))# making date into words
+    #dateWords = dateToWords(int(date))# making date into words
     date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
-
-    
     cur.close()
-    return render_template('launch.html', launch=l, date = date, dateWords=dateWords)
+    return render_template('launch.html', launch=l, date = date)
 
 def dateToWords(dateNum):
     # get day

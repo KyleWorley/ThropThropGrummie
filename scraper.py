@@ -5,13 +5,6 @@ from contextlib import closing
 import sqlite3 as sql
 import csv
 
-# I AM ASHAMED TO DO DO THIS
-countries = []
-with open('countries.csv', 'r') as csvfile:
-     reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-     for row in reader:
-         countries.append(''.join(row))
-
 #SQL
 database = "spaceapps.db"
 secret_key='#SpaceAppsHSV'
@@ -138,7 +131,12 @@ for data in missionData:
         #print(articles)
         conn = create_connection(database)
         cur = conn.cursor()
-        cur.execute('''INSERT INTO launches VALUES("''' + date + '''","''' + time + '''","''' + location + '''","''' + vehicle + '''","''' + mission + '''","''' + desc + '''","''' + articles + '''","''' + image + '''")''')
+        #cur.execute('''INSERT INTO launches VALUES("''' + date + '''","''' + time + '''","''' + location + '''","''' + vehicle + '''","''' + mission + '''","''' + desc + '''","''' + articles + '''","''' + image + '''")''')
+        cur.execute('''INSERT INTO launches(date, time, location, vehicle,\
+                mission, Description, articles, image) values
+                (?,?,?,?,?,?,?,?)''', (date, time, location, vehicle, mission, \
+                desc, articles, image))
+        conn.commit()
         conn.close()
     
     except Error as e:
