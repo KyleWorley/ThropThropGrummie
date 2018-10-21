@@ -70,13 +70,22 @@ def launchpage(mission):
     session = OAuth1Session('KbFIpnP6oaZkSka4wSRqEk8Qz',
                     client_secret='7R2Dcb1BZod4aXbyzukOJYJF6lMR0ExOe5Fk7me3jCWhgf3Iz3')
     r = session.get(url)
-    app.logger.info(r.content)
+    #app.logger.info(r.content)
+    responseString = r.content.decode('utf-8')
+    responseJson = json.loads(responseString)
+    userImages = []
+    statuses = responseJson["statuses"]
+    for statusDict in statuses:
+        entities = statusDict['entities']
+        media = entities['media'][0]
+        app.logger.info(media['media_url_https'])
+        userImages.append(media['media_url_https'])
     date = str(l['date'])
     app.logger.info(date)
     #dateWords = dateToWords(int(date))# making date into words
     date = date[4:6] + '/' + date[6:8] + '/' + date[0:4]
     cur.close()
-    return render_template('launch.html', launch=l, date = date, hashtag = hashtag)
+    return render_template('launch.html', launch=l, date = date, hashtag = hashtag, images=userImages)
 
 def dateToWords(dateNum):
     # get day
